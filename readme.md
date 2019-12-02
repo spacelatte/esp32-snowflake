@@ -6,7 +6,10 @@
 **Prerequistes:**
 
  - RAMDISK mounted at `/Volumes/ramdisk[number]`
-   ```diskutil erasedisk apfs tempramdisk$RANDOM $(hdiutil attach -nomount ram://$((1024*1024*8)))```
+   Example (8GB ramdisk):
+   ```
+   diskutil erasedisk apfs tempramdisk$RANDOM $(hdiutil attach -nomount ram://$((1024*1024*8)))
+   ```
  - Arduino Application
  - MacOS X (macOS)
  - Heltec ESP32 (v1 and v2 are ok)
@@ -14,8 +17,8 @@
 
 **Usage:**
 
-Run command `make` to upload and connect `serial` device.
-You can override these variables to your needs:
+Run command `make` to upload and connect to `serial` device.
+You can override these variables according to your needs:
 
  - `PORT`: `/dev/cu.[your_port_name]`, replace it with your board's
  - `BAUD`: `115200`, match it with the code (for monitoring purposes)
@@ -32,4 +35,4 @@ ss.bmp  : pull screenshot from device.
 
 ---
 
-Note: Pulling screenshot may 'freeze' screen for a second :)
+Note: Pulling screenshot from device may 'freeze' screen for a second :)

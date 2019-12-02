@@ -74,36 +74,48 @@ void setup() {
 	return;
 }
 
-void display_dump(Stream &s) {
-	for(int i=0; i<64; i++) {
-		for(int j=0; j<128; j+=8) {
+char* display_dump(Adafruit_SSD1306 &d) {
+	unsigned position = 0;
+	char *buffer = (char*) calloc(1
+		+ (d.width() * d.height())
+		+ d.height(),
+		sizeof(char)
+	);
+	for(int i=0; i<d.height(); i++) {
+		for(int j=0; j<d.width(); j+=8) {
 			unsigned char b = 0;
 			for(int k=0; k<8; k++) {
-				bool pixel = display.getPixel(j+k, i);
-				s.print(pixel ? "1" : "0");
+				bool pixel = d.getPixel(j+k, i);
+				// use branchless: equalivent to `(pixel ? '1' : '0')`
+				buffer[position++] = (pixel + '0');
 				//b |= pixel << k;
 				continue;
 			}
-			//s.printf(" 0x%02x,", b);
 			continue;
 		}
-		s.println();
+		buffer[position++] = '\n';
 		continue;
 	}
-	return;
+	return buffer;
 }
 
 void loop() {
 	if(Serial.available()) {
 		Serial.read();
-		display_dump(Serial);
+		char *data = display_dump(display);
+		Serial.write(data);
+		free(data);
 	}
 
 	display.clearDisplay();
 	display.setCursor(10, 10);
 	display.setTextWrap(false);
 	display.setTextColor(SSD1306_WHITE);
-	display.print("hello world");
+	display.printf("%02d:%02d hello world",
+		millis()/1000/60%60,
+		millis()/1000%60,
+		NULL
+	);
 
 	for(int i=0; i<FLAKE_COUNT; i++) {
 		icons[i][YPOS] += icons[i][DELTAY];

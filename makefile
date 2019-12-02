@@ -37,9 +37,9 @@ m monitor: wait
 	trap 'kill %1' EXIT 0 1 2 3 6 9 15; cat $(PORT) & stty -f $(PORT) raw $(BAUD); wait
 
 clean:
-	rm -rf $(BUILD) $(TARGETS) ??.h ss.bmp
+	rm -rf $(BUILD) $(TARGETS) $(wildcard ss*.bmp) ??.h
 
-ss.bmp: screenshot.exe
+ss.bmp ss%.bmp: screenshot.exe
 	timeout 3s cat $(PORT) | ./$< $(WIDTH) $(HEIGHT) > $@ & \
 	stty -f $(PORT) raw $(BAUD); \
 	echo | tee $(PORT); \

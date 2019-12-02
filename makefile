@@ -1,5 +1,7 @@
 #!/usr/bin/env make -f
 
+WIDTH   := 128
+HEIGHT  :=  64
 CC      := cc
 CFLAGS  := -Wall
 TARGETS := convert.exe screenshot.exe
@@ -38,7 +40,7 @@ clean:
 	rm -rf $(BUILD) $(TARGETS) ??.h ss.bmp
 
 ss.bmp: screenshot.exe
-	timeout 3s cat $(PORT) | ./$< > $@ & \
+	timeout 3s cat $(PORT) | ./$< $(WIDTH) $(HEIGHT) > $@ & \
 	stty -f $(PORT) raw $(BAUD); \
 	echo | tee $(PORT); \
 	true

@@ -7,8 +7,24 @@
 
 #include "bitmap.h"
 
+#ifndef WIDTH
+#define WIDTH 128
+#endif
+
+#ifndef HEIGHT
+#define HEIGHT 64
+#endif
+
+#define OR(X, Y) ( ((X) == 0) ? (Y) : (X) )
+
 int main(int argc, char **argv) {
-	const int width = 128, height = 64;
+	if(argc < 3) {
+		fprintf(stderr, "Usage: %s <width> <height>\n", argv[0]);
+		return 1;
+	}
+	const int
+		width  = OR(atoi(argv[1]), WIDTH ),
+		height = OR(atoi(argv[2]), HEIGHT);
 	unsigned pos = 0;
 	uint8_t buffer[width*height];
 	while(!feof(stdin) && pos < (width*height)) {
